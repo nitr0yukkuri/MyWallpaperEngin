@@ -1,0 +1,7 @@
+node_modules/
+npm-cache/
+npm-cache-dir/
+testdir/
+dist/
+.env
+.DS_Store
