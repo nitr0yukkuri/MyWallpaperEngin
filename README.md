@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WAKATO Living Desktop
 
 WAKATO Living Desktop is a Wallpaper Engine Web Wallpaper that treats the Wakato logo as a living 3D desktop space instead of a flat background image.
@@ -55,3 +56,6 @@ The v1 scene focuses on:
 - Wallpaper Engine property listener
 
 The next natural additions are character blinking, logo-edge distortion, time/weather sync, audio-reactive bloom, and GitHub activity mood.
+=======
+# MyWallpaperEngin
+>>>>>>> d36a147aeb5d01c51605590e6e9db9c2c4514da2
