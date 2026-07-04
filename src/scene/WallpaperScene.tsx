@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { AbyssLightRays } from "./AbyssLightRays";
 import { BubbleField } from "./BubbleField";
 import { CameraRig } from "./CameraRig";
 import { DeepSeaBackground } from "./DeepSeaBackground";
 import { Effects } from "./Effects";
 import { MarineSnowField } from "./MarineSnowField";
+import { SeaFloor } from "./SeaFloor";
 import { WakatoBlockText } from "./WakatoBlockText";
 
 export function WallpaperScene() {
@@ -18,7 +18,7 @@ export function WallpaperScene() {
       <pointLight color="#0b6cff" intensity={1.2} distance={9} position={[3.2, -1.4, -1.2]} />
       <CameraRig />
       <DeepSeaBackground />
-      <AbyssLightRays />
+      <SeaFloor />
       <MarineSnowField count={320} />
       <BubbleField count={56} />
       <Suspense fallback={null}>

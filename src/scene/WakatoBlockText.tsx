@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { motionScaleFor, useWallpaperStore } from "../store/wallpaperStore";
+import { getTerrainHeight } from "./SeaFloor";
 
 type BarSpec = {
   x: number;
@@ -44,7 +45,7 @@ const LETTERS: Record<string, BarSpec[]> = {
 function Bar({ spec, material }: { spec: BarSpec; material: THREE.Material }) {
   return (
     <mesh position={[spec.x, spec.y, 0]} rotation={[0, 0, spec.r ?? 0]} material={material}>
-      <boxGeometry args={[spec.w, spec.h, 0.22, 3, 3, 2]} />
+      <boxGeometry args={[spec.w, spec.h, 0.8, 3, 3, 3]} />
     </mesh>
   );
 }
@@ -69,18 +70,13 @@ export function WakatoBlockText() {
   const material = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color("#7eeeff"),
-        emissive: new THREE.Color("#073b55"),
-        emissiveIntensity: 0.4,
-        metalness: 0.05,
-        roughness: 0.12,
-        transmission: 0.62,
-        thickness: 1.8,
-        ior: 1.33,
-        transparent: true,
-        opacity: 0.82,
+        color: new THREE.Color("#ffffff"),
+        emissive: new THREE.Color("#ffffff"),
+        emissiveIntensity: 0.8,
+        metalness: 0.1,
+        roughness: 0.2,
         clearcoat: 1,
-        clearcoatRoughness: 0.08,
+        clearcoatRoughness: 0.1,
       }),
     [],
   );
@@ -88,20 +84,25 @@ export function WakatoBlockText() {
   useFrame(({ clock }) => {
     const time = clock.elapsedTime;
 
-    material.emissiveIntensity = 0.35 + neonIntensity / 180 + Math.sin(time * 1.1) * 0.04;
+    material.emissiveIntensity = 0.8 + neonIntensity / 300 + Math.sin(time * 0.75) * 0.05;
 
     if (!groupRef.current) {
       return;
     }
 
-    groupRef.current.position.y = Math.sin(time * 0.46 * motionScale) * 0.075;
-    groupRef.current.rotation.x = -0.08 + pointer.y * 0.08 + Math.sin(time * 0.32) * 0.018;
-    groupRef.current.rotation.y = pointer.x * 0.16 + Math.sin(time * 0.24) * 0.045;
-    groupRef.current.rotation.z = Math.sin(time * 0.2) * 0.01;
+    // 砂浜の正確な高さを取得して、テキストの底面をぴったり合わせる
+    const groundY = getTerrainHeight(0, 0.55);
+    // Y軸で斜めに向かせているため、底面の計算値(0.53)はほぼそのまま適用可能
+    groupRef.current.position.y = groundY + 0.53 + Math.sin(time * 0.32 * motionScale) * 0.025;
+    
+    // 後ろへの倒れ込みを緩やかにし、Y軸で斜め右(0.35)を向かせて3D感を強調
+    groupRef.current.rotation.x = -0.15 + Math.sin(time * 0.24) * 0.012;
+    groupRef.current.rotation.y = 0.35 + Math.sin(time * 0.18) * 0.025;
+    groupRef.current.rotation.z = 0.02 + Math.sin(time * 0.16) * 0.006;
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0.25]} scale={[0.98, 0.98, 0.98]}>
+    <group ref={groupRef} position={[0, 0.2, 0.55]} scale={[1.02, 1.02, 1.02]}>
       <Letter char="W" x={-2.25} material={material} />
       <Letter char="A" x={-1.35} material={material} />
       <Letter char="K" x={-0.48} material={material} />

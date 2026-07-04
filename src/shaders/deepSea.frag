@@ -40,20 +40,11 @@ void main() {
   color = mix(color, surface, smoothstep(0.78, 1.0, depth) * 0.55);
 
   float n = noise(uv * 5.0 + vec2(uTime * 0.018, -uTime * 0.027));
-  float rays = 0.0;
-  for (int i = 0; i < 5; i++) {
-    float fi = float(i);
-    float x = 0.16 + fi * 0.17 + sin(uTime * 0.12 + fi) * 0.04;
-    float beam = smoothstep(0.11, 0.0, abs(uv.x - x - centered.y * 0.16));
-    rays += beam * smoothstep(0.96, 0.2, uv.y);
-  }
-
   float c1 = caustic(uv + vec2(uTime * 0.01, 0.0), 0.75, 18.0);
   float c2 = caustic(uv.yx + vec2(0.0, -uTime * 0.008), 0.42, 27.0);
   float vignette = smoothstep(0.82, 0.28, radius);
 
-  color += vec3(0.18, 0.74, 0.92) * rays * (0.055 + uNeon * 0.03);
-  color += vec3(0.12, 0.9, 1.0) * (c1 * 0.035 + c2 * 0.018) * smoothstep(0.22, 0.92, uv.y);
+  color += vec3(0.08, 0.48, 0.62) * (c1 * 0.018 + c2 * 0.012) * smoothstep(0.12, 0.82, uv.y);
   color += (n - 0.5) * 0.028;
   color *= vignette;
   color += vec3(0.0, 0.035, 0.055) * smoothstep(0.55, 0.0, uv.y);
