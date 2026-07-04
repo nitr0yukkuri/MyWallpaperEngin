@@ -90,10 +90,17 @@ export function WakatoBlockText() {
       return;
     }
 
-    // 砂浜の正確な高さを取得して、テキストの底面をぴったり合わせる
-    const groundY = getTerrainHeight(0, 0.55);
-    // Y軸で斜めに向かせているため、底面の計算値(0.53)はほぼそのまま適用可能
-    groupRef.current.position.y = groundY + 0.53 + Math.sin(time * 0.32 * motionScale) * 0.025;
+    // 砂浜の起伏によって端の文字（Wなど）が埋まるのを防ぐため、
+    // ロゴが配置されている幅全体（-2.25 ～ 2.25）の地形の最高地点を計算する
+    let maxGroundY = -100;
+    for (let lx = -2.25; lx <= 2.12; lx += 0.5) {
+      const wx = lx * Math.cos(0.35);
+      const wz = 0.55 - lx * Math.sin(0.35);
+      maxGroundY = Math.max(maxGroundY, getTerrainHeight(wx, wz));
+    }
+
+    // Y軸で斜めに向かせているため、底面の計算値(0.53)を最高地点に合わせる
+    groupRef.current.position.y = maxGroundY + 0.53 + Math.sin(time * 0.32 * motionScale) * 0.025;
     
     // 後ろへの倒れ込みを緩やかにし、Y軸で斜め右(0.35)を向かせて3D感を強調
     groupRef.current.rotation.x = -0.15 + Math.sin(time * 0.24) * 0.012;
