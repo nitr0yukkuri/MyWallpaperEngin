@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { BackgroundShaderPlane } from "./BackgroundShaderPlane";
 import { CameraRig } from "./CameraRig";
+import { CharacterStage } from "./CharacterStage";
 import { Effects } from "./Effects";
-import { FloatingIcons } from "./FloatingIcons";
-import { LogoStage } from "./LogoStage";
 import { NeonRings } from "./NeonRings";
 import { SakuraField } from "./SakuraField";
 import { particleCountFor, useWallpaperStore } from "../store/wallpaperStore";
@@ -21,8 +20,7 @@ export function WallpaperScene() {
       <NeonRings />
       <SakuraField count={particleCountFor(particleAmount)} />
       <Suspense fallback={null}>
-        <LogoStage />
-        <FloatingIcons />
+        <CharacterStage />
       </Suspense>
       <Effects />
     </>
