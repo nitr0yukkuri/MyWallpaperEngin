@@ -1,26 +1,28 @@
 import { Suspense } from "react";
-import { BackgroundShaderPlane } from "./BackgroundShaderPlane";
+import { AbyssLightRays } from "./AbyssLightRays";
+import { BubbleField } from "./BubbleField";
 import { CameraRig } from "./CameraRig";
-import { CharacterStage } from "./CharacterStage";
+import { DeepSeaBackground } from "./DeepSeaBackground";
 import { Effects } from "./Effects";
-import { NeonRings } from "./NeonRings";
-import { SakuraField } from "./SakuraField";
-import { particleCountFor, useWallpaperStore } from "../store/wallpaperStore";
+import { MarineSnowField } from "./MarineSnowField";
+import { WakatoBlockText } from "./WakatoBlockText";
 
 export function WallpaperScene() {
-  const particleAmount = useWallpaperStore((state) => state.particleAmount);
-
   return (
     <>
-      <color attach="background" args={["#21131d"]} />
-      <ambientLight intensity={1.2} />
-      <pointLight color="#ff6fab" intensity={4.2} position={[0, 1.4, 3.2]} />
+      <color attach="background" args={["#04111e"]} />
+      <fogExp2 attach="fog" args={["#03111d", 0.09]} />
+      <ambientLight intensity={0.42} color="#5ac8df" />
+      <directionalLight color="#91f2ff" intensity={1.5} position={[-1.8, 4.2, 3.2]} />
+      <pointLight color="#29d8ff" intensity={3.2} distance={7.5} position={[0, 0.4, 2.8]} />
+      <pointLight color="#0b6cff" intensity={1.2} distance={9} position={[3.2, -1.4, -1.2]} />
       <CameraRig />
-      <BackgroundShaderPlane />
-      <NeonRings />
-      <SakuraField count={particleCountFor(particleAmount)} />
+      <DeepSeaBackground />
+      <AbyssLightRays />
+      <MarineSnowField count={320} />
+      <BubbleField count={56} />
       <Suspense fallback={null}>
-        <CharacterStage />
+        <WakatoBlockText />
       </Suspense>
       <Effects />
     </>
