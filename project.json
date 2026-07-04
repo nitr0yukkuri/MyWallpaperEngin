@@ -1,0 +1,63 @@
+{
+  "title": "WAKATO Living Desktop",
+  "type": "web",
+  "file": "dist/index.html",
+  "general": {
+    "properties": {
+      "themeMode": {
+        "text": "Theme Mode",
+        "type": "combo",
+        "value": "living",
+        "options": [
+          { "label": "Sakura Light", "value": "sakura" },
+          { "label": "Neon Night", "value": "night" },
+          { "label": "Living Planet Pink", "value": "living" },
+          { "label": "Cyber Dark", "value": "cyber" }
+        ]
+      },
+      "particleAmount": {
+        "text": "Particle Amount",
+        "type": "combo",
+        "value": "normal",
+        "options": [
+          { "label": "Low", "value": "low" },
+          { "label": "Normal", "value": "normal" },
+          { "label": "High", "value": "high" },
+          { "label": "Insane", "value": "insane" }
+        ]
+      },
+      "neonIntensity": {
+        "text": "Neon Intensity",
+        "type": "slider",
+        "value": 62,
+        "min": 0,
+        "max": 100
+      },
+      "motion": {
+        "text": "Motion",
+        "type": "combo",
+        "value": "normal",
+        "options": [
+          { "label": "Calm", "value": "calm" },
+          { "label": "Normal", "value": "normal" },
+          { "label": "Active", "value": "active" }
+        ]
+      },
+      "showLogo": { "text": "Show Logo", "type": "bool", "value": true },
+      "showCharacters": { "text": "Show Characters", "type": "bool", "value": true },
+      "mouseReaction": { "text": "Mouse Reaction", "type": "bool", "value": true },
+      "postProcessing": {
+        "text": "Post Processing",
+        "type": "combo",
+        "value": "medium",
+        "options": [
+          { "label": "Low", "value": "low" },
+          { "label": "Medium", "value": "medium" },
+          { "label": "High", "value": "high" }
+        ]
+      },
+      "timeSync": { "text": "Time Sync", "type": "bool", "value": true },
+      "weatherSync": { "text": "Weather Sync", "type": "bool", "value": false }
+    }
+  }
+}
