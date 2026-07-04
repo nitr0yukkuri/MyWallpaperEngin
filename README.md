@@ -281,7 +281,6 @@ npm run build
 
 ### v3
 
-- GitHub activity による桜・光粒子の密度変化
 - 今日コミットしたらロゴが少し明るくなる演出
 - 雨の日は桜ではなく雨粒に変化
 - 夜は Neon Night へ自動移行
