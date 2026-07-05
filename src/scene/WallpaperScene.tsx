@@ -4,8 +4,10 @@ import { BubbleBurst } from "./BubbleBurst";
 import { CameraRig } from "./CameraRig";
 import { DeepSeaBackground } from "./DeepSeaBackground";
 import { Effects } from "./Effects";
+import { FishSchool } from "./FishSchool";
 import { MarineSnowField } from "./MarineSnowField";
 import { SeaFloor } from "./SeaFloor";
+import { SeaweedField } from "./SeaweedField";
 import { WakatoBlockText } from "./WakatoBlockText";
 import { WaterSurface } from "./WaterSurface";
 
@@ -22,6 +24,8 @@ export function WallpaperScene() {
       <DeepSeaBackground />
       <WaterSurface />
       <SeaFloor />
+      <SeaweedField />
+      <FishSchool />
       <MarineSnowField count={320} />
       <BubbleField count={56} />
       <BubbleBurst />
