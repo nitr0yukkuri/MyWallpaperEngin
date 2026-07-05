@@ -65,6 +65,46 @@ function Letter({ char, x, material }: { char: string; x: number; material: THRE
   );
 }
 
+function SandContact() {
+  const shadowMaterial = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color("#2f2a20"),
+        transparent: true,
+        opacity: 0.22,
+        depthWrite: false,
+      }),
+    [],
+  );
+  const sandMaterial = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color("#c5ae7b"),
+        transparent: true,
+        opacity: 0.28,
+        depthWrite: false,
+      }),
+    [],
+  );
+
+  return (
+    <>
+      <mesh position={[0, -0.62, -0.44]} rotation={[0, 0, 0]} material={shadowMaterial} scale={[1, 0.36, 1]}>
+        <planeGeometry args={[5.35, 0.82]} />
+      </mesh>
+      <mesh position={[-1.65, -0.57, 0.43]} rotation={[0.08, 0, 0.02]} material={sandMaterial}>
+        <boxGeometry args={[1.05, 0.055, 0.12]} />
+      </mesh>
+      <mesh position={[0.05, -0.6, 0.43]} rotation={[0.08, 0, -0.015]} material={sandMaterial}>
+        <boxGeometry args={[1.2, 0.05, 0.12]} />
+      </mesh>
+      <mesh position={[1.62, -0.58, 0.43]} rotation={[0.08, 0, 0.02]} material={sandMaterial}>
+        <boxGeometry args={[1.05, 0.052, 0.12]} />
+      </mesh>
+    </>
+  );
+}
+
 export function WakatoBlockText() {
   const groupRef = useRef<THREE.Group>(null);
   const { pointer } = useThree();
@@ -105,7 +145,7 @@ export function WakatoBlockText() {
     }
 
     // Y軸で斜めに向かせているため、底面の計算値(0.53)を最高地点に合わせる
-    groupRef.current.position.y = maxGroundY + 0.53 + Math.sin(time * 0.32 * motionScale) * 0.025;
+    groupRef.current.position.y = maxGroundY + 0.47 + Math.sin(time * 0.32 * motionScale) * 0.018;
     
     // 後ろへの倒れ込みを緩やかにし、Y軸で斜め右(0.35)を向かせて3D感を強調
     groupRef.current.rotation.x = -0.15 + Math.sin(time * 0.24) * 0.012;
@@ -115,6 +155,7 @@ export function WakatoBlockText() {
 
   return (
     <group ref={groupRef} position={[0, 0.2, 0.55]} scale={[1.02, 1.02, 1.02]}>
+      <SandContact />
       <Letter char="W" x={-2.25} material={material} />
       <Letter char="A" x={-1.35} material={material} />
       <Letter char="K" x={-0.48} material={material} />

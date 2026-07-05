@@ -8,6 +8,8 @@ type Fish = {
   scale: number;
   speed: number;
   phase: number;
+  delay: number;
+  depthDrift: number;
   color: string;
 };
 
@@ -25,6 +27,8 @@ function createFish(): Fish[] {
       scale: 0.5 + ((index * 19) % 10) * 0.035,
       speed: 0.45 + ((index * 11) % 8) * 0.04,
       phase: index * 0.69,
+      delay: row * 0.42 + column * 0.045,
+      depthDrift: 0.04 + ((index * 7) % 6) * 0.012,
       color: index % 5 === 0 ? "#75e6ff" : index % 7 === 0 ? "#d7f7ff" : "#082638",
     };
   });
@@ -76,9 +80,12 @@ export function FishSchool() {
 
     groupRef.current.children.forEach((child, index) => {
       const item = fish[index];
-      child.position.x = item.offset.x + Math.sin(time * item.speed + item.phase) * 0.09;
-      child.position.y = item.offset.y + Math.cos(time * item.speed * 0.8 + item.phase) * 0.055;
-      child.rotation.z = Math.sin(time * item.speed + item.phase) * 0.08;
+      const localTime = time - item.delay;
+      child.position.x = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
+      child.position.y = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
+      child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
+      child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1;
+      child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09;
     });
   });
 
