@@ -14,7 +14,7 @@ export function getTerrainHeight(worldX: number, worldZ: number) {
 
 export function SeaFloor() {
   const materialRef = useRef<THREE.MeshLambertMaterial>(null);
-  
+
   const geometry = useMemo(() => {
     const geo = new THREE.PlaneGeometry(150, 150, 64, 64);
     const positions = geo.attributes.position;
@@ -22,7 +22,7 @@ export function SeaFloor() {
     for (let index = 0; index < positions.count; index++) {
       const x = positions.getX(index);
       const y = positions.getY(index);
-      
+
       const z = terrainSimplex.noise(x / 20, y / 20);
       positions.setZ(index, z);
     }

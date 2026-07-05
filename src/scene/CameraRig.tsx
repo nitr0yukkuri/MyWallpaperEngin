@@ -12,7 +12,7 @@ export function CameraRig() {
 
     camera.position.x += (targetX - camera.position.x) * 0.03;
     camera.position.y += (targetY - camera.position.y) * 0.03;
-    
+
     // ご要望通り、タスクバーで見切れないようにさらに少しだけ「下を向く」
     camera.lookAt(0, -0.9, 0);
   });

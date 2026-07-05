@@ -11,7 +11,7 @@ export default function App() {
         powerPreference: "high-performance",
       }}
       camera={{
-        position: [0, 0, 8],
+        position: [0, 0, 13],
         fov: 35,
       }}
     >

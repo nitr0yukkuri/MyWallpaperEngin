@@ -27,9 +27,10 @@ export function DeepSeaBackground() {
   });
 
   return (
-    <mesh position={[0, 0, -5.2]}>
-      <planeGeometry args={[16, 9]} />
-      <shaderMaterial ref={materialRef} vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} />
+    // プレーンを大幅に拡大し後方へ: エッジが絶対画面に映らないようにする
+    <mesh position={[0, 0, -14]}>
+      <planeGeometry args={[80, 45]} />
+      <shaderMaterial ref={materialRef} vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} depthWrite={false} />
     </mesh>
   );
 }
