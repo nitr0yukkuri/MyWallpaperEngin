@@ -25,8 +25,8 @@ export function WallpaperScene() {
       <SeaFloor />
       <SeaweedField />
       <FishSchool />
-      <MarineSnowField count={220} />
-      <BubbleField count={18} />
+      <MarineSnowField count={260} />
+      <BubbleField count={28} />
       <Suspense fallback={null}>
         <WakatoBlockText />
       </Suspense>

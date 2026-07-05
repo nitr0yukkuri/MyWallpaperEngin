@@ -25,14 +25,15 @@ void main() {
   float mouseRipple = rippleAmp * smoothstep(rippleWidth, 0.0, abs(mouseDist - rippleRadius))
                     * sin((mouseDist - rippleRadius) / rippleWidth * 3.14159);
 
-  float totalAlpha = (0.10 + abs(ambient) * 1.5 + abs(mouseRipple) * 2.0);
-  totalAlpha = clamp(totalAlpha, 0.0, 0.35);
+  float topMask = smoothstep(0.42, 1.0, uv.y);
+  float totalAlpha = (abs(ambient) * 0.34 + abs(mouseRipple) * 0.34) * topMask;
+  totalAlpha = clamp(totalAlpha, 0.0, 0.045);
 
   // 波紋の強い部分を白く光らせ、平静部分は透明に
   vec3 surfaceColor = mix(
-    vec3(0.3, 0.7, 0.9),
-    vec3(1.0, 1.0, 1.0),
-    clamp(abs(mouseRipple) * 12.0 + abs(ambient) * 3.0, 0.0, 1.0)
+    vec3(0.24, 0.72, 0.86),
+    vec3(0.82, 0.98, 1.0),
+    clamp(abs(mouseRipple) * 4.0 + abs(ambient) * 1.35, 0.0, 1.0)
   );
 
   gl_FragColor = vec4(surfaceColor, totalAlpha);

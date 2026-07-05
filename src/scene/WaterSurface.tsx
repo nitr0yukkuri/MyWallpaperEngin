@@ -42,8 +42,8 @@ export function WaterSurface() {
 
   return (
     // 水面: カメラより少し上（y=2.4）に広い透明プレーン
-    <mesh position={[0, 2.4, -5]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[40, 30, 64, 64]} />
+    <mesh position={[0, 5.6, -18]} rotation={[-0.82, 0, 0]}>
+      <planeGeometry args={[70, 14, 96, 16]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
