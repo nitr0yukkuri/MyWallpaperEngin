@@ -6,7 +6,6 @@ import { DeepSeaBackground } from "./DeepSeaBackground";
 import { Effects } from "./Effects";
 import { MarineSnowField } from "./MarineSnowField";
 import { SeaFloor } from "./SeaFloor";
-import { VolumetricLight } from "./VolumetricLight";
 import { WakatoBlockText } from "./WakatoBlockText";
 import { WaterSurface } from "./WaterSurface";
 
@@ -22,7 +21,6 @@ export function WallpaperScene() {
       <CameraRig />
       <DeepSeaBackground />
       <WaterSurface />
-      <VolumetricLight />
       <SeaFloor />
       <MarineSnowField count={320} />
       <BubbleField count={56} />
