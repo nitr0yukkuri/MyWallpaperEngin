@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { motionScaleFor, useWallpaperStore } from "../store/wallpaperStore";
 
@@ -10,6 +10,7 @@ type Fish = {
   phase: number;
   delay: number;
   depthDrift: number;
+  avoid: THREE.Vector2;
   color: string;
 };
 
@@ -29,6 +30,7 @@ function createFish(): Fish[] {
       phase: index * 0.69,
       delay: row * 0.42 + column * 0.045,
       depthDrift: 0.04 + ((index * 7) % 6) * 0.012,
+      avoid: new THREE.Vector2(0, 0),
       color: index % 5 === 0 ? "#75e6ff" : index % 7 === 0 ? "#d7f7ff" : "#082638",
     };
   });
@@ -64,6 +66,7 @@ function FishSilhouette({ fish }: { fish: Fish }) {
 export function FishSchool() {
   const groupRef = useRef<THREE.Group>(null);
   const fish = useMemo(createFish, []);
+  const { pointer } = useThree();
   const motion = useWallpaperStore((state) => state.motion);
   const motionScale = motionScaleFor(motion);
 
@@ -83,9 +86,20 @@ export function FishSchool() {
       const localTime = time - item.delay;
       const swimX = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
       const swimY = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
+      const cursorLocalX = pointer.x * 5.2 - groupRef.current!.position.x;
+      const cursorLocalY = pointer.y * 2.6 - groupRef.current!.position.y;
+      const awayX = swimX - cursorLocalX;
+      const awayY = swimY - cursorLocalY;
+      const distance = Math.max(0.001, Math.hypot(awayX, awayY));
+      const pressure = Math.max(0, 1 - distance / 1.15);
+      const targetAvoidX = (awayX / distance) * pressure * 0.11;
+      const targetAvoidY = (awayY / distance) * pressure * 0.07;
 
-      child.position.x = swimX;
-      child.position.y = swimY;
+      item.avoid.x += (targetAvoidX - item.avoid.x) * 0.045;
+      item.avoid.y += (targetAvoidY - item.avoid.y) * 0.045;
+
+      child.position.x = swimX + item.avoid.x;
+      child.position.y = swimY + item.avoid.y;
       child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
       child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1;
       child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09;
