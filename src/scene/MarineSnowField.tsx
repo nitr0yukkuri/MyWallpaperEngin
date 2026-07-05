@@ -69,7 +69,7 @@ export function MarineSnowField({ count = 260 }: { count?: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 8, 8]} />
-      <meshBasicMaterial color="#b7f5ff" transparent opacity={0.48} blending={THREE.AdditiveBlending} depthWrite={false} />
+      <meshBasicMaterial color="#b7f5ff" transparent opacity={0.32} blending={THREE.AdditiveBlending} depthWrite={false} />
     </instancedMesh>
   );
 }

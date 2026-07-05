@@ -11,7 +11,7 @@ export default function App() {
       }}
       camera={{
         position: [0, 0, 13],
-        fov: 38,
+        fov: 36,
       }}
     >
       <WallpaperScene />

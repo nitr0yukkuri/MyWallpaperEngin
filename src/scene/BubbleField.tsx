@@ -49,7 +49,7 @@ export function BubbleField({ count = 48 }: { count?: number }) {
       }
 
       dummy.position.set(bubble.x, bubble.y, bubble.z);
-      dummy.scale.setScalar(0.055 * bubble.scale);
+      dummy.scale.setScalar(0.038 * bubble.scale);
       dummy.updateMatrix();
       mesh.setMatrixAt(index, dummy.matrix);
     });
@@ -60,7 +60,7 @@ export function BubbleField({ count = 48 }: { count?: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <ringGeometry args={[0.45, 1, 16]} />
-      <meshBasicMaterial color="#d8fbff" transparent opacity={0.24} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
+      <meshBasicMaterial color="#d8fbff" transparent opacity={0.14} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
     </instancedMesh>
   );
 }

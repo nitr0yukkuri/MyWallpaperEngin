@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { BubbleField } from "./BubbleField";
-import { BubbleBurst } from "./BubbleBurst";
 import { CameraRig } from "./CameraRig";
 import { DeepSeaBackground } from "./DeepSeaBackground";
 import { Effects } from "./Effects";
@@ -26,9 +25,8 @@ export function WallpaperScene() {
       <SeaFloor />
       <SeaweedField />
       <FishSchool />
-      <MarineSnowField count={320} />
-      <BubbleField count={56} />
-      <BubbleBurst />
+      <MarineSnowField count={220} />
+      <BubbleField count={18} />
       <Suspense fallback={null}>
         <WakatoBlockText />
       </Suspense>
