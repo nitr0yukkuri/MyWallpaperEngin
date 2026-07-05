@@ -1,6 +1,5 @@
 import { Canvas } from "@react-three/fiber";
 import { WallpaperScene } from "./scene/WallpaperScene";
-
 export default function App() {
   return (
     <Canvas
@@ -12,7 +11,7 @@ export default function App() {
       }}
       camera={{
         position: [0, 0, 13],
-        fov: 35,
+        fov: 38,
       }}
     >
       <WallpaperScene />
