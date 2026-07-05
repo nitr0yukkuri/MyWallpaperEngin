@@ -81,8 +81,11 @@ export function FishSchool() {
     groupRef.current.children.forEach((child, index) => {
       const item = fish[index];
       const localTime = time - item.delay;
-      child.position.x = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
-      child.position.y = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
+      const swimX = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
+      const swimY = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
+
+      child.position.x = swimX;
+      child.position.y = swimY;
       child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
       child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1;
       child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09;

@@ -34,6 +34,8 @@ export function MarineSnowField({ count = 260 }: { count?: number }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const particles = useMemo(() => createParticles(count), [count]);
   const { pointer } = useThree();
+  const lastPointer = useRef(new THREE.Vector2(0, 0));
+  const flow = useRef(new THREE.Vector2(0, 0));
   const motion = useWallpaperStore((state) => state.motion);
   const motionScale = motionScaleFor(motion);
 
@@ -45,10 +47,16 @@ export function MarineSnowField({ count = 260 }: { count?: number }) {
       return;
     }
 
+    flow.current.x = flow.current.x * 0.92 + (pointer.x - lastPointer.current.x) * 0.08;
+    flow.current.y = flow.current.y * 0.92 + (pointer.y - lastPointer.current.y) * 0.08;
+    lastPointer.current.set(pointer.x, pointer.y);
+
     particles.forEach((particle, index) => {
       particle.y += particle.speed * delta * motionScale;
       particle.x += Math.sin(time * particle.drift + particle.phase) * 0.0025 * motionScale;
       particle.x += pointer.x * 0.0009 * (2.0 - particle.z);
+      particle.x += flow.current.x * 0.045 * (2.2 - particle.z);
+      particle.y += flow.current.y * 0.018;
 
       if (particle.y > 4.5) {
         particle.y = -4.4;

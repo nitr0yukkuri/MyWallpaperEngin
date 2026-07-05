@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { motionScaleFor, useWallpaperStore } from "../store/wallpaperStore";
 import { getTerrainHeight } from "./SeaFloor";
@@ -55,6 +55,9 @@ function createRibbonGeometry(width: number, height: number) {
 
 function KelpRibbonMesh({ ribbon }: { ribbon: KelpRibbon }) {
   const ref = useRef<THREE.Mesh>(null);
+  const { pointer } = useThree();
+  const lastPointer = useRef(new THREE.Vector2(0, 0));
+  const flow = useRef(new THREE.Vector2(0, 0));
   const motion = useWallpaperStore((state) => state.motion);
   const motionScale = motionScaleFor(motion);
   const baseY = getTerrainHeight(ribbon.x, ribbon.z) + 0.03;
@@ -78,8 +81,12 @@ function KelpRibbonMesh({ ribbon }: { ribbon: KelpRibbon }) {
     }
 
     const time = clock.elapsedTime * motionScale;
-    ref.current.rotation.z = ribbon.lean + Math.sin(time * 0.56 + ribbon.phase) * 0.09;
-    ref.current.rotation.y = Math.sin(time * 0.38 + ribbon.phase) * 0.18;
+    flow.current.x = flow.current.x * 0.95 + (pointer.x - lastPointer.current.x) * 0.05;
+    flow.current.y = flow.current.y * 0.95 + (pointer.y - lastPointer.current.y) * 0.05;
+    lastPointer.current.set(pointer.x, pointer.y);
+
+    ref.current.rotation.z = ribbon.lean + Math.sin(time * 0.56 + ribbon.phase) * 0.09 + flow.current.x * 0.24;
+    ref.current.rotation.y = Math.sin(time * 0.38 + ribbon.phase) * 0.18 + flow.current.y * 0.12;
     ref.current.scale.x = 1 + Math.sin(time * 0.72 + ribbon.phase) * 0.035;
   });
 

@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 type Bubble = {
@@ -30,6 +30,9 @@ export function BubbleField({ count = 48 }: { count?: number }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const bubbles = useMemo(() => createBubbles(count), [count]);
+  const { pointer } = useThree();
+  const lastPointer = useRef(new THREE.Vector2(0, 0));
+  const flow = useRef(new THREE.Vector2(0, 0));
 
   useFrame(({ clock }, delta) => {
     const time = clock.elapsedTime;
@@ -39,9 +42,15 @@ export function BubbleField({ count = 48 }: { count?: number }) {
       return;
     }
 
+    flow.current.x = flow.current.x * 0.9 + (pointer.x - lastPointer.current.x) * 0.1;
+    flow.current.y = flow.current.y * 0.9 + (pointer.y - lastPointer.current.y) * 0.1;
+    lastPointer.current.set(pointer.x, pointer.y);
+
     bubbles.forEach((bubble, index) => {
       bubble.y += bubble.speed * delta;
       bubble.x += Math.sin(time * 0.7 + bubble.phase) * 0.003;
+      bubble.x += flow.current.x * 0.07 * (1.9 - bubble.z);
+      bubble.y += flow.current.y * 0.024;
 
       if (bubble.y > 4.5) {
         bubble.y = -4.5;

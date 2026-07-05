@@ -2,36 +2,28 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise.js";
 
+// 地形の高さ計算を外部から参照できるように共通インスタンス化
 export const terrainSimplex = new SimplexNoise();
-
-function floorHeightLocal(x: number, y: number) {
-  const dune = terrainSimplex.noise(x / 20, y / 20);
-  const rippleWarp = terrainSimplex.noise(x / 18, y / 12) * 1.6;
-  const ripple = Math.sin(x * 1.65 + y * 0.16 + rippleWarp) * 0.035;
-  const fineRipple = Math.sin(x * 3.2 + y * 0.08) * 0.012;
-
-  return dune + ripple + fineRipple;
-}
 
 export function getTerrainHeight(worldX: number, worldZ: number) {
   const localX = worldX;
-  const localY = -15 - worldZ;
-
-  return -2 + floorHeightLocal(localX, localY);
+  const localY = -15 - worldZ; // position.z = -15, rotation.x = -90deg の逆算
+  return -2 + terrainSimplex.noise(localX / 20, localY / 20); // position.y = -2 を加味
 }
 
 export function SeaFloor() {
   const materialRef = useRef<THREE.MeshLambertMaterial>(null);
 
   const geometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(150, 150, 96, 96);
+    const geo = new THREE.PlaneGeometry(150, 150, 64, 64);
     const positions = geo.attributes.position;
 
-    for (let index = 0; index < positions.count; index += 1) {
+    for (let index = 0; index < positions.count; index++) {
       const x = positions.getX(index);
       const y = positions.getY(index);
 
-      positions.setZ(index, floorHeightLocal(x, y));
+      const z = terrainSimplex.noise(x / 20, y / 20);
+      positions.setZ(index, z);
     }
 
     geo.computeVertexNormals();
@@ -40,7 +32,11 @@ export function SeaFloor() {
 
   return (
     <mesh geometry={geometry} position={[0, -2, -15]} rotation={[-Math.PI / 2, 0, 0]}>
-      <meshLambertMaterial ref={materialRef} color="#AA9966" flatShading={false} />
+      <meshLambertMaterial
+        ref={materialRef}
+        color="#AA9966" // 記事のFog色および砂浜のトーンを完全に再現
+        flatShading={false}
+      />
     </mesh>
   );
 }
