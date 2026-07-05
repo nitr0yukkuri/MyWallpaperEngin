@@ -11,6 +11,7 @@ type Fish = {
   delay: number;
   depthDrift: number;
   avoid: THREE.Vector2;
+  turn: number;
   color: string;
 };
 
@@ -31,6 +32,7 @@ function createFish(): Fish[] {
       delay: row * 0.42 + column * 0.045,
       depthDrift: 0.04 + ((index * 7) % 6) * 0.012,
       avoid: new THREE.Vector2(0, 0),
+      turn: 0,
       color: index % 5 === 0 ? "#75e6ff" : index % 7 === 0 ? "#d7f7ff" : "#082638",
     };
   });
@@ -91,18 +93,20 @@ export function FishSchool() {
       const awayX = swimX - cursorLocalX;
       const awayY = swimY - cursorLocalY;
       const distance = Math.max(0.001, Math.hypot(awayX, awayY));
-      const pressure = Math.max(0, 1 - distance / 1.15);
-      const targetAvoidX = (awayX / distance) * pressure * 0.11;
-      const targetAvoidY = (awayY / distance) * pressure * 0.07;
+      const pressure = Math.max(0, 1 - distance / 1.9);
+      const targetAvoidX = (awayX / distance) * pressure * 0.22;
+      const targetAvoidY = (awayY / distance) * pressure * 0.13;
+      const targetTurn = THREE.MathUtils.clamp((awayX / distance) * pressure, -1, 1);
 
-      item.avoid.x += (targetAvoidX - item.avoid.x) * 0.045;
-      item.avoid.y += (targetAvoidY - item.avoid.y) * 0.045;
+      item.avoid.x += (targetAvoidX - item.avoid.x) * 0.08;
+      item.avoid.y += (targetAvoidY - item.avoid.y) * 0.08;
+      item.turn += (targetTurn - item.turn) * 0.075;
 
       child.position.x = swimX + item.avoid.x;
       child.position.y = swimY + item.avoid.y;
       child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
-      child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1;
-      child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09;
+      child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1 + item.turn * 0.42;
+      child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09 + item.avoid.y * 0.85;
     });
   });
 
