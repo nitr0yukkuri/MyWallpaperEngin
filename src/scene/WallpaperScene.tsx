@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { BubbleField } from "./BubbleField";
 import { CameraRig } from "./CameraRig";
 import { DeepSeaBackground } from "./DeepSeaBackground";
+import { DistantRockShadows } from "./DistantRockShadows";
 import { Effects } from "./Effects";
 import { FishSchool } from "./FishSchool";
 import { MarineSnowField } from "./MarineSnowField";
@@ -21,6 +22,7 @@ export function WallpaperScene() {
       <pointLight color="#0b6cff" intensity={1.2} distance={9} position={[3.2, -1.4, -1.2]} />
       <CameraRig />
       <DeepSeaBackground />
+      <DistantRockShadows />
       <WaterSurface />
       <SeaFloor />
       <SeaweedField />
