@@ -15,10 +15,10 @@ type KelpRibbon = {
 };
 
 const ribbons: KelpRibbon[] = [
-  { x: -5.4, z: -3.2, height: 1.45, width: 0.34, phase: 0.2, lean: -0.18, color: "#164a45" },
-  { x: -4.75, z: -4.1, height: 1.18, width: 0.28, phase: 1.4, lean: 0.08, color: "#1b5a4d" },
-  { x: 5.25, z: -3.4, height: 1.55, width: 0.36, phase: 0.8, lean: 0.2, color: "#153f44" },
-  { x: 4.55, z: -4.35, height: 1.1, width: 0.26, phase: 2.1, lean: -0.08, color: "#1c5647" },
+  { x: -5.9, z: -5.4, height: 1.18, width: 0.36, phase: 0.2, lean: -0.14, color: "#113d3c" },
+  { x: -5.1, z: -6.2, height: 0.96, width: 0.3, phase: 1.4, lean: 0.06, color: "#15483f" },
+  { x: 5.8, z: -5.6, height: 1.24, width: 0.38, phase: 0.8, lean: 0.16, color: "#10383d" },
+  { x: 4.9, z: -6.45, height: 0.92, width: 0.28, phase: 2.1, lean: -0.06, color: "#16463c" },
 ];
 
 function createRibbonGeometry(width: number, height: number) {
@@ -69,7 +69,9 @@ function KelpRibbonMesh({ ribbon }: { ribbon: KelpRibbon }) {
         roughness: 0.92,
         metalness: 0,
         emissive: new THREE.Color(ribbon.color),
-        emissiveIntensity: 0.035,
+        transparent: true,
+        opacity: 0.72,
+        emissiveIntensity: 0.018,
         side: THREE.DoubleSide,
       }),
     [ribbon.color],
@@ -85,9 +87,9 @@ function KelpRibbonMesh({ ribbon }: { ribbon: KelpRibbon }) {
     flow.current.y = flow.current.y * 0.95 + (pointer.y - lastPointer.current.y) * 0.05;
     lastPointer.current.set(pointer.x, pointer.y);
 
-    ref.current.rotation.z = ribbon.lean + Math.sin(time * 0.56 + ribbon.phase) * 0.09 + flow.current.x * 0.24;
-    ref.current.rotation.y = Math.sin(time * 0.38 + ribbon.phase) * 0.18 + flow.current.y * 0.12;
-    ref.current.scale.x = 1 + Math.sin(time * 0.72 + ribbon.phase) * 0.035;
+    ref.current.rotation.z = ribbon.lean + Math.sin(time * 0.28 + ribbon.phase) * 0.055 + flow.current.x * 0.08;
+    ref.current.rotation.y = Math.sin(time * 0.2 + ribbon.phase) * 0.11 + flow.current.y * 0.04;
+    ref.current.scale.x = 1 + Math.sin(time * 0.34 + ribbon.phase) * 0.018;
   });
 
   return <mesh ref={ref} geometry={geometry} material={material} position={[ribbon.x, baseY, ribbon.z]} />;
