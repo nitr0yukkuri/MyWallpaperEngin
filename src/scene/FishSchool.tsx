@@ -66,55 +66,72 @@ function FishSilhouette({ fish }: { fish: Fish }) {
 }
 
 export function FishSchool() {
-  const groupRef = useRef<THREE.Group>(null);
-  const fish = useMemo(createFish, []);
+  const groupRefs = useRef<Array<THREE.Group | null>>([]);
+  const fishGroups = useMemo(() => [createFish(), createFish()], []);
   const { pointer } = useThree();
   const motion = useWallpaperStore((state) => state.motion);
   const motionScale = motionScaleFor(motion);
 
   useFrame(({ clock }) => {
-    if (!groupRef.current) {
-      return;
-    }
-
     const time = clock.elapsedTime * motionScale;
     const travel = ((time * 0.42) % 16) - 8;
+    const groupY = 0.72 + Math.sin(time * 0.2) * 0.08;
+    const groupZ = -5.7;
+    const rotationY = Math.sin(time * 0.18) * 0.08;
 
-    groupRef.current.position.set(travel - 3.5, 0.72 + Math.sin(time * 0.2) * 0.08, -5.7);
-    groupRef.current.rotation.y = Math.sin(time * 0.18) * 0.08;
+    groupRefs.current.forEach((group, groupIndex) => {
+      if (!group) {
+        return;
+      }
 
-    groupRef.current.children.forEach((child, index) => {
-      const item = fish[index];
-      const localTime = time - item.delay;
-      const swimX = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
-      const swimY = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
-      const cursorLocalX = pointer.x * 5.2 - groupRef.current!.position.x;
-      const cursorLocalY = pointer.y * 2.6 - groupRef.current!.position.y;
-      const awayX = swimX - cursorLocalX;
-      const awayY = swimY - cursorLocalY;
-      const distance = Math.max(0.001, Math.hypot(awayX, awayY));
-      const pressure = Math.max(0, 1 - distance / 1.9);
-      const targetAvoidX = (awayX / distance) * pressure * 0.22;
-      const targetAvoidY = (awayY / distance) * pressure * 0.13;
-      const targetTurn = THREE.MathUtils.clamp((awayX / distance) * pressure, -1, 1);
+      const fish = fishGroups[groupIndex];
+      const groupX = travel - 3.5 + groupIndex * 16;
 
-      item.avoid.x += (targetAvoidX - item.avoid.x) * 0.08;
-      item.avoid.y += (targetAvoidY - item.avoid.y) * 0.08;
-      item.turn += (targetTurn - item.turn) * 0.075;
+      group.position.set(groupX, groupY, groupZ);
+      group.rotation.y = rotationY;
 
-      child.position.x = swimX + item.avoid.x;
-      child.position.y = swimY + item.avoid.y;
-      child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
-      child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1 + item.turn * 0.42;
-      child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09 + item.avoid.y * 0.85;
+      group.children.forEach((child, index) => {
+        const item = fish[index];
+        const localTime = time - item.delay;
+        const swimX = item.offset.x + Math.sin(localTime * item.speed + item.phase) * 0.11;
+        const swimY = item.offset.y + Math.cos(localTime * item.speed * 0.8 + item.phase) * 0.065;
+        const cursorLocalX = pointer.x * 5.2 - groupX;
+        const cursorLocalY = pointer.y * 2.6 - groupY;
+        const awayX = swimX - cursorLocalX;
+        const awayY = swimY - cursorLocalY;
+        const distance = Math.max(0.001, Math.hypot(awayX, awayY));
+        const pressure = Math.max(0, 1 - distance / 1.9);
+        const targetAvoidX = (awayX / distance) * pressure * 0.22;
+        const targetAvoidY = (awayY / distance) * pressure * 0.13;
+        const targetTurn = THREE.MathUtils.clamp((awayX / distance) * pressure, -1, 1);
+
+        item.avoid.x += (targetAvoidX - item.avoid.x) * 0.08;
+        item.avoid.y += (targetAvoidY - item.avoid.y) * 0.08;
+        item.turn += (targetTurn - item.turn) * 0.075;
+
+        child.position.x = swimX + item.avoid.x;
+        child.position.y = swimY + item.avoid.y;
+        child.position.z = item.offset.z + Math.sin(localTime * 0.34 + item.phase) * item.depthDrift;
+        child.rotation.y = Math.sin(localTime * 0.55 + item.phase) * 0.1 + item.turn * 0.42;
+        child.rotation.z = Math.sin(localTime * item.speed + item.phase) * 0.09 + item.avoid.y * 0.85;
+      });
     });
   });
 
   return (
-    <group ref={groupRef}>
-      {fish.map((item, index) => (
-        <FishSilhouette key={index} fish={item} />
+    <>
+      {fishGroups.map((fish, groupIndex) => (
+        <group
+          key={groupIndex}
+          ref={(node) => {
+            groupRefs.current[groupIndex] = node;
+          }}
+        >
+          {fish.map((item, index) => (
+            <FishSilhouette key={index} fish={item} />
+          ))}
+        </group>
       ))}
-    </group>
+    </>
   );
 }
