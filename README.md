@@ -1,5 +1,7 @@
 # WAKATO Abyss Desktop
 
+[日本語](README.md) | [English](README.en.md)
+
 <div align="center">
   <img src="https://img.shields.io/badge/Type-Wallpaper_Engine_Web_Wallpaper-0b6cff?style=for-the-badge" alt="Wallpaper Engine Web Wallpaper" />
   <img src="https://img.shields.io/badge/Stack-Vite_/_React_/_R3F-04111e?style=for-the-badge&logo=react&logoColor=61dafb" alt="Vite React R3F" />
